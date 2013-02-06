@@ -1,0 +1,26 @@
+pages/page1.html
+<a href = 'index.html'> 1
+<img src = 'dynamicPicture.php'></img> 1
+
+<a href = 'picture.gif'> 1
+<img src = 'image.png'></img> 1
+
+<a href = 'download.pdf'> 1
+<img src = 'virus.exe'></img> 1
+pages/page2.html
+<a href = 'index.html'> 3
+<a href = 'messypage.php'> 1
+<a href = 'annothermessypage.asp'> 1
+
+<a href = 'picture.gif'> 2
+<img src = 'image.png'></img> 1
+
+<a href = 'download.pdf'> 2
+<img src = 'virus.exe'></img> 1
+pages/page3.html
+<img src = 'sigmond'></img> 1
+<a href = 'index.html'> 2
+<a href = 'google.com/tentimes.php'> 10
+<a href = 'root'> 1
+
+

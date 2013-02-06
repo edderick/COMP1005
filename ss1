@@ -1,0 +1,29 @@
+#! /bin/csh -f
+#
+set rec="off"
+if ($#argv > 0) then
+    switch($argv[1])
+    case -r:
+        set rec="on"
+        shift
+    breaksw
+    endsw
+endif
+
+if($#argv > 0) then
+     set file = $argv[1]
+            if((-d $file) && ($rec == "on")) then
+                set containedFiles = `ls $file`
+                foreach dirFile ($containedFiles) 
+                     ./ss1 -r $file/$dirFile
+                end
+            endif
+            if(-f $file) then
+                set lowercaseFile = `echo $file | gawk '{print tolower($0)}'`
+                set fileExtension = $lowercaseFile:e
+                if($fileExtension == "html" || $fileExtension == "htm"|| $fileExtension == "php" || $fileExtension == "xhtml" || $fileExtension == "asp" || $fileExtension == "xht" ) then
+                     ./aa1 $file
+                 endif
+            endif 
+    
+endif

@@ -1,0 +1,120 @@
+#!/bin/gawk -f
+#
+BEGIN{f = ""} #f is essentially a flag for whether file name has been printed
+{if ( f == "") {
+        print FILENAME;
+        f = FILENAME;
+    }
+}
+
+$0 ~ /[[:space:]]*\<[[:space:]]*a/ {
+                                if(match($0, /href[[:space:]]*\=[[:space:]]*\".+\"/)){  #Checks for an href with double quotes
+                                    href = substr($0, RSTART, RLENGTH);
+                                    split(href, parts, "\"");
+                                    url = parts[2];
+                                }
+                                else if(match($0, /href[[:space:]]*\=[[:space:]]*'.+'/)){ #Check for an href with single quotes
+                                    href = substr($0, RSTART, RLENGTH);
+                                    split(href, parts, "'");
+                                    url = parts[2];
+                                }
+    
+                                if(url != ""){
+                               
+                                split(url, urlParts, "."); #Split url up by .
+                                
+                                if (length(urlParts) == 1){
+                                    filetype = "HTML";
+                                } else {
+                                    filetype = toupper(urlParts[length(urlParts)]); #Take last part after a .
+                                }
+                                                                
+                                url = "<a href = '" url "'>"
+                                    
+                                if ((filetype == "JPG") || (filetype == "JPEG") || (filetype == "GIF")|| (filetype == "BMP") || (filetype == "ICO") || (filetype == "PNG") || (filetype == "TIFF") || (filetype == "SVG")){
+                                    if(quantities[url] == ""){
+                                        images[length(images) + 1] = url;
+                                    }
+                                }
+                                else if((filetype == "HTML") || (filetype == "HTM") || (filetype == "PHP") || (filetype == "ASP") || (filetype == "XHTM") || (filetype == "XHT") || (filetype == "XML")){
+                                    if(quantities[url] == ""){
+                                         webpages[length(webpages) + 1] = url;
+                                    }
+                                }
+                                else
+                                    if(quantities[url] == ""){
+                                        downloads[length(downloads) + 1] = url;
+                                    }
+                    
+                                quantities[url] ++;
+                                }
+                                url = "";
+                    
+}
+
+$0 ~ /[:blank:]*\<[:blank:]*img/ {
+    if(match($0, /src[:blank:]*\=[:blank:]*\".+\"/)){  #Checks for an href with double quotes
+                                    href = substr($0, RSTART, RLENGTH);
+                                    split(href, parts, "\"");
+                                    url = parts[2];
+                                }
+                                else if(match($0, /src[[:space:]]*\=[[:space:]]*'.+'/)){ #Check for an href with single quotes
+                                    href = substr($0, RSTART, RLENGTH);
+                                    split(href, parts, "'");
+                                    url = parts[2];
+                                }
+                                
+                                if(url !=""){
+
+                                split(url, urlParts, "."); #Split url up by .
+                                
+                                if (length(urlParts) == 1){
+                                    filetype = "HTML";
+                                } else {
+                                    filetype = toupper(urlParts[length(urlParts)]); #Take last part after a .
+                                }
+
+                                url = "<img src = '" url "'></img>"
+
+                                if ((filetype == "JPG") || (filetype == "JPEG") || (filetype == "GIF")|| (filetype == "BMP") || (filetype == "ICO") || (filetype == "PNG") || (filetype == "TIFF") || (filetype == "SVG")){
+                                    if(quantities[url] == ""){
+                                        images[length(images) + 1] = url;
+                                    }
+                                }
+
+ ###############################May remove these different file types as they are not images? ########
+
+                                else if((filetype == "HTML") || (filetype == "HTM") || (filetype == "PHP") || (filetype == "ASP") || (filetype == "XHTM") || (filetype == "XHT") || (filetype == "XML")){
+                                    if(quantities[url] == ""){
+                                         webpages[length(webpages) + 1] = url;
+                                    }
+                                }
+                                else
+                                    if(quantities[url] == ""){
+                                        downloads[length(downloads) + 1] = url;
+                                    }
+                    
+                                quantities[url] ++;
+                    }
+                    url = "";
+}
+
+END{
+
+    for(w in webpages){ 
+        print webpages[w] " " quantities[webpages[w]];
+    }
+
+    print "";
+
+    for(i in images){ 
+        print images[i] " " quantities[images[i]];
+    }    
+
+    print "";
+
+    for(d in downloads){ 
+        print downloads[d] " " quantities[downloads[d]];
+    }
+}
+
